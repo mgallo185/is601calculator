@@ -1,46 +1,42 @@
+"""REPL for the calculator application."""
+
 from calculator.operation import Operation
 
-def run_calculator():
-    """Runs the REPL for the calculator."""
-    print("Welcome to the calculator!")
-    print("Supported operations: add, subtract, multiply, divide")
-    print("Type 'exit' to quit.")
+def calculator_repl():
+    """Runs a simple Read-Eval-Print Loop (REPL) for the calculator."""
+    operations = {
+        "1": ("Addition", Operation.add),
+        "2": ("Subtraction", Operation.subtract),
+        "3": ("Multiplication", Operation.multiply),
+        "4": ("Division", Operation.divide),
+        "5": ("Exit", None)
+    }
 
     while True:
-        # Get user input
-        operation = input("Enter operation (add, subtract, multiply, divide): ").lower()
+        print("\nCalculator Menu:")
+        for key, (name, _) in operations.items():
+            print(f"{key}. {name}")
 
-        if operation == 'exit':
-            print("Exiting the calculator. Goodbye!")
+        choice = input("Select an operation (1-5): ").strip()
+
+        if choice == "5":
+            print("Exiting calculator. Goodbye!")
             break
 
-        # Validate operation
-        if operation not in ['add', 'subtract', 'multiply', 'divide']:
-            print("Invalid operation. Please try again.")
+        if choice not in operations:
+            print("Invalid choice. Please select a number between 1 and 5.")
             continue
 
         try:
-            # Get operands
-            a = float(input("Enter the first operand: "))
-            b = float(input("Enter the second operand: "))
-        except ValueError:
-            print("Invalid input. Please enter numeric values.")
-            continue
+            num1 = float(input("Enter first number: "))
+            num2 = float(input("Enter second number: "))
 
-        try:
-            # Perform the operation using the static methods from the Operation class
-            if operation == 'add':
-                result = Operation.add(a, b)
-            elif operation == 'subtract':
-                result = Operation.subtract(a, b)
-            elif operation == 'multiply':
-                result = Operation.multiply(a, b)
-            elif operation == 'divide':
-                result = Operation.divide(a, b)
-
-            # Display the result
-            print(f"The result of {operation}({a}, {b}) is: {result}")
+            operation_name, operation_func = operations[choice]
+            result = operation_func(num1, num2)
+            print(f"Result of {operation_name.lower()}: {result}")
 
         except ValueError as e:
-            # Handle division by zero or any other value-related errors
             print(f"Error: {e}")
+
+if __name__ == "__main__":
+    calculator_repl()

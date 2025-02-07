@@ -1,18 +1,21 @@
-'''My Calculator Test'''
-from calculator import add, subtract, multiply, divide
+"""Unit tests for the Operation class in the calculator module."""
 
-def test_addition():
-    '''Test that addition function works '''    
-    assert add(2,2) == 4
+import pytest
+from calculator.operation import Operation
 
-def test_subtraction():
-    '''Test that addition function works '''    
-    assert subtract(2,2) == 0
+# Test arithmetic operations
+@pytest.mark.parametrize("method, a, b, expected", [
+    (Operation.add, 2, 2, 4),
+    (Operation.subtract, 2, 2, 0),
+    (Operation.multiply, 2, 2, 4),
+    (Operation.divide, 2, 2, 1),
+])
+def test_operations(method, a, b, expected):
+    """Test arithmetic operations"""
+    assert method(a, b) == expected, f"Expected {expected} but got {method(a, b)}"
 
-def test_multiply():
-    '''Test that multiplication function works '''    
-    assert multiply(2,2) == 4
-
-def test_divide():
-    '''Test that division function works '''    
-    assert divide(2,2) == 1
+# Test division by zero
+def test_divide_by_zero():
+    """Test that division by zero raises ValueError"""
+    with pytest.raises(ValueError, match="Cannot divide by zero"):
+        Operation.divide(2, 0)

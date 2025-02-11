@@ -26,53 +26,23 @@ def run_calculator_with_input(monkeypatch, inputs):
     sys.stdout = sys.__stdout__  # Reset stdout
     return captured_output.getvalue()
 
-# Positive Tests
-def test_addition(monkeypatch):
-    """Test addition operation in REPL."""
+@pytest.mark.parametrize("operation, num1, num2, expected", [
+    ("1", 2, 3, "Result of addition"),
+    ("2", 5, 3, "Result of subtraction"),
+    ("3", 4, 5, "Result of multiplication"),
+    ("4", 10, 2, "Result of division")
+])
+
+def test_operations(monkeypatch, operation, num1, num2, expected):
+    """Test various arithmetic operations in REPL."""
     inputs = [
-        "1",  # Select addition
-        "2",  # Enter first number
-        "3",  # Enter second number
+        operation,  # Select operation
+        str(num1),  # Enter first number
+        str(num2),  # Enter second number
         "5",  # Exit
     ]
     output = run_calculator_with_input(monkeypatch, inputs)
-    assert "Result of addition" in output
-
-
-def test_subtraction(monkeypatch):
-    """Test subtraction operation in REPL."""
-    inputs = [
-        "2",  # Select subtraction
-        "5",  # Enter first number
-        "3",  # Enter second number
-        "5",  # Exit
-    ]
-    output = run_calculator_with_input(monkeypatch, inputs)
-    assert "Result of subtraction" in output
-
-
-def test_multiplication(monkeypatch):
-    """Test multiplication operation in REPL."""
-    inputs = [
-        "3",  # Select multiplication
-        "4",  # Enter first number
-        "5",  # Enter second number
-        "5",  # Exit
-    ]
-    output = run_calculator_with_input(monkeypatch, inputs)
-    assert "Result of multiplication" in output
-
-
-def test_division(monkeypatch):
-    """Test division operation in REPL."""
-    inputs = [
-        "4",  # Select division
-        "10",  # Enter first number
-        "2",  # Enter second number
-        "5",  # Exit
-    ]
-    output = run_calculator_with_input(monkeypatch, inputs)
-    assert "Result of division" in output
+    assert expected in output
 
 def test_division_by_zero(monkeypatch):
     """Test division by zero in REPL."""
@@ -148,7 +118,7 @@ def test_non_numeric_input(monkeypatch):
     (Operation.multiply, 4, 5, 20),
     (Operation.divide, 10, 2, 5),
 ])
-def test_operations(method, a, b, expected):
+def test_calculations(method, a, b, expected):
     """Test arithmetic operations."""
     assert method(a, b) == expected, f"Expected {expected} but got {method(a, b)}"
 

@@ -10,7 +10,9 @@ def calculator_repl():
         "2": ("Subtraction", Operation.subtract),
         "3": ("Multiplication", Operation.multiply),
         "4": ("Division", Operation.divide),
-        "5": ("Exit", None)
+        "5": ("Exit", None),
+        "6": ("View History", None),
+        "7": ("Clear History", None)
     }
 
     calculations = []  # Store past calculations
@@ -20,11 +22,20 @@ def calculator_repl():
         for key, (name, _) in operations.items():
             print(f"{key}. {name}")
 
-        choice = input("Select an operation (1-5): ").strip()
+        choice = input("Select an operation (1-7): ").strip()
 
         if choice == "5":
             print("Exiting calculator. Goodbye!")
             break
+        elif choice == "6":
+            print("\nCalculation History:")
+            for calc in Calculation.get_history():
+                print(calc)
+            continue
+        elif choice == "7":
+            Calculation.clear_history()
+            print("Calculation history cleared.")
+            continue
 
         if choice not in operations:
             print("Invalid choice. Please select a number between 1 and 5.")

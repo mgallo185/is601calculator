@@ -4,7 +4,7 @@ class Calculation:
     """Represents a single mathematical operation performed."""
     # store calcualtion history
     history = [] 
-    
+    #class constructor
     def __init__(self, operation: str, a: float, b: float, result: float):
         self.operation = operation
         self.a = a

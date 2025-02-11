@@ -1,13 +1,8 @@
-"""Unit tests for the Operation class in the calculator module."""
+""" Testnig repl """
 import sys
-#from unittest.mock import patch
 from io import StringIO
 import pytest
-from calculator.operation import Operation
-from calculator.calculate import Calculation
 from calculator import calculator_repl
-
-
 def run_calculator_with_input(monkeypatch, inputs):
     """
     Simulates user input and captures output from the calculator REPL.
@@ -26,11 +21,12 @@ def run_calculator_with_input(monkeypatch, inputs):
     sys.stdout = sys.__stdout__  # Reset stdout
     return captured_output.getvalue()
 
+
 @pytest.mark.parametrize("operation, num1, num2, expected", [
     ("1", 2, 3, "Result of addition"),
     ("2", 5, 3, "Result of subtraction"),
     ("3", 4, 5, "Result of multiplication"),
-    ("4", 10, 2, "Result of division")
+    ("4", 10, 2, "Result of division"),
 ])
 
 def test_operations(monkeypatch, operation, num1, num2, expected):
@@ -108,78 +104,3 @@ def test_non_numeric_input(monkeypatch):
     ]
     output = run_calculator_with_input(monkeypatch, inputs)
     assert "Error: Invalid input. Please enter numerical values." in output
-
-
-
-
-@pytest.mark.parametrize("method, a, b, expected", [
-    (Operation.add, 2, 2, 4),
-    (Operation.subtract, 5, 2, 3),
-    (Operation.multiply, 4, 5, 20),
-    (Operation.divide, 10, 2, 5),
-])
-def test_calculations(method, a, b, expected):
-    """Test arithmetic operations."""
-    assert method(a, b) == expected, f"Expected {expected} but got {method(a, b)}"
-
-
-# Test division by zero
-def test_divide_by_zero():
-    """Test that division by zero raises ValueError."""
-    with pytest.raises(ValueError, match="Cannot divide by zero"):
-        Operation.divide(2, 0)
-
-
-# Test non-integer division
-def test_divide_non_integer():
-    """Test that division returns the correct result for floating point numbers."""
-    result = Operation.divide(5, 2)
-    assert result == 2.5, f"Expected 2.5 but got {result}"
-
-
-# Test invalid operation
-def test_invalid_operation():
-    """Test for invalid operations."""
-    with pytest.raises(TypeError):
-        Operation.add("string", 2)
-    with pytest.raises(TypeError):
-        Operation.subtract(2, "string")
-    with pytest.raises(TypeError):
-        Operation.multiply("string", "string")
-
-
-# Test calculation history
-def test_calculation_history():
-    """Test calculation history functionality."""
-    Calculation.clear_history()
-    assert len(Calculation.get_history()) == 0
-    Calculation("Addition", 2, 3, 5)
-    assert len(Calculation.get_history()) == 1
-    assert str(Calculation.get_last_calculation()) == "Addition: 2 and 3 = 5"
-
-
-# Test clearing calculation history
-def test_clear_calculation_history():
-    """Test clearing calculation history."""
-    Calculation("Addition", 1, 1, 2)
-    Calculation.clear_history()
-    assert not Calculation.get_history(), "History should be empty."
-
-
-# Test the get_history when no calculations are added
-def test_get_history_empty():
-    """Test that get_history returns an empty list when no calculations have been added."""
-    Calculation.clear_history()
-    assert not Calculation.get_history(), "History should be empty."
-
-
-# Test that add_calculation explicitly adds a calculation to history
-def test_add_calculation():
-    """Test that add_calculation correctly adds a calculation to history."""
-    Calculation.clear_history()
-    calc = Calculation("Multiplication", 3, 3, 9)
-    # Now, add_calculation should only add the calculation once
-    Calculation.add_calculation(calc)
-    # Since the constructor already added the calculation, we expect the history to have only 1 item
-    assert Calculation.get_history(), "History should not be empty."
-    assert Calculation.get_history()[0] == calc, "item should match the added calculation."

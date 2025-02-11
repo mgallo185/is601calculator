@@ -38,7 +38,7 @@ def calculator_repl():
             continue
 
         if choice not in operations:
-            print("Invalid choice. Please select a number between 1 and 5.")
+            print("Invalid choice. Please select a number between 1 and 7.")
             continue
 
         try:
@@ -64,6 +64,3 @@ def calculator_repl():
     print("\nPast Calculations:")
     for calc in calculations:
         print(calc)
-
-if __name__ == "__main__":
-    calculator_repl()

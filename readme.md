@@ -13,7 +13,7 @@ test/ contains 3 files
 3. test_operation.py: tests operations class
 
 
-#Setting up the program
+# Setting up the program
 1. Open Ubuntu and cd into directory where homework3 is
 2. code . to open vs code in that directory
 3. create (if you havent ) and activate virtual enviroment: source venv/bin/activate

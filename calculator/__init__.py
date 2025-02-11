@@ -1,6 +1,7 @@
 """REPL for the calculator application."""
 
 from calculator.operation import Operation
+from calculator.calculate import Calculation  # Import Calculation class
 
 def calculator_repl():
     """Runs a simple Read-Eval-Print Loop (REPL) for the calculator."""
@@ -11,6 +12,8 @@ def calculator_repl():
         "4": ("Division", Operation.divide),
         "5": ("Exit", None)
     }
+
+    calculations = []  # Store past calculations
 
     while True:
         print("\nCalculator Menu:")
@@ -32,11 +35,24 @@ def calculator_repl():
             num2 = float(input("Enter second number: "))
 
             operation_name, operation_func = operations[choice]
+
+            if choice == "4" and num2 == 0:
+                print("Error: Cannot divide by zero.")
+                continue
+
             result = operation_func(num1, num2)
             print(f"Result of {operation_name.lower()}: {result}")
 
-        except ValueError as e:
-            print(f"Error: {e}")
+            # Store the calculation
+            calculations.append(Calculation(operation_name, num1, num2, result))
+
+        except ValueError:
+            print("Error: Invalid input. Please enter numerical values.")
+
+    # Print history before exiting
+    print("\nPast Calculations:")
+    for calc in calculations:
+        print(calc)
 
 if __name__ == "__main__":
     calculator_repl()

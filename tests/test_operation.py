@@ -1,16 +1,26 @@
 """testing operations """
 import pytest
 from calculator.operation import Operation
+from faker import Faker
+
+fake = Faker()
 
 @pytest.mark.parametrize("method, a, b, expected", [
-    (Operation.add, 2, 2, 4),
-    (Operation.subtract, 5, 2, 3),
-    (Operation.multiply, 4, 5, 20),
-    (Operation.divide, 10, 2, 5),
+    (Operation.add, fake.random_int(min=1, max=100), fake.random_int(min=1, max=100), lambda a, b: a + b),
+    (Operation.subtract, fake.random_int(min=1, max=100), fake.random_int(min=1, max=100), lambda a, b: a - b),
+    (Operation.multiply, fake.random_int(min=1, max=10), fake.random_int(min=1, max=10), lambda a, b: a * b),
+    (Operation.divide, fake.random_int(min=1, max=100), fake.random_int(min=1, max=10), lambda a, b: round(a / b, 2)),
 ])
 def test_calculations(method, a, b, expected):
-    """Test arithmetic operations."""
-    assert method(a, b) == expected, f"Expected {expected} but got {method(a, b)}"
+    """Test arithmetic operations using Faker-generated data."""
+    result = method(a, b)
+    expected_value = expected(a, b)
+    
+    if method == Operation.divide:
+        # Use pytest.approx() for floating-point comparisons
+        assert result == pytest.approx(expected_value, rel=1e-2), f"Expected {expected_value} but got {result}"
+    else:
+        assert result == expected_value, f"Expected {expected_value} but got {result}"
 
 def test_divide_by_zero():
     """Test that division by zero raises ValueError."""

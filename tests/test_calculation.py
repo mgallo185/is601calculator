@@ -1,6 +1,8 @@
 """ Testing calculation class with its history"""
 from calculator.calculate import Calculation
+from faker import Faker
 
+fake =Faker()
 def test_calculation_history():
     """Test calculation history functionality."""
     Calculation.clear_history()
@@ -21,9 +23,13 @@ def test_get_history_empty():
     assert not Calculation.get_history(), "History should be empty."
 
 def test_add_calculation():
-    """Test that add_calculation correctly adds a calculation to history."""
+    """Test that add_calculation correctly adds a calculation to history with fake data."""
     Calculation.clear_history()
-    calc = Calculation("Multiplication", 3, 3, 9)
+    a = fake.random_int(min=1, max=100)
+    b = fake.random_int(min=1, max=100)
+    result = a + b
+    calc = Calculation("Addition", a, b, result)
     Calculation.add_calculation(calc)
+    
     assert Calculation.get_history(), "History should not be empty."
     assert Calculation.get_history()[0] == calc, "Item should match the added calculation."
